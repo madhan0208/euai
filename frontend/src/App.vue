@@ -17,7 +17,17 @@
     <button @click="incrementCounter" :disabled="loading">
       Increment Counter
     </button>
+    <button @click="incrementCounter" :disabled="loading">
+      Assess
+    </button>
+    <button @click="incrementCounter" :disabled="loading">
+      Analyze
+    </button>
+    <button @click="incrementCounter" :disabled="loading">
+      Act
+    </button>
   </div>
+  
 </template>
 
 <script setup>
@@ -33,7 +43,7 @@ let socket;
 const getCounter = async () => {
   try {
     loading.value = true;
-    const response = await fetch('http://192.168.0.106:3000/api/counter');  //replace with current ip address
+    const response = await fetch('http://localhost:3000/api/counter');  //replace with current ip address
     const data = await response.json();
     counter.value = data.value;
     loading.value = false;
@@ -46,7 +56,7 @@ const getCounter = async () => {
 const incrementCounter = async () => {
   try {
     loading.value = true;
-    const response = await fetch('http://192.168.0.106:3000/api/counter/increment', {  //replace with current ip address
+    const response = await fetch('http://localhost:3000/api/counter/increment', {  //replace with current ip address
       method: 'POST',
     });
     const data = await response.json();

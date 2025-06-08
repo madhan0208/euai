@@ -18,6 +18,10 @@ const port = process.env.PORT || 3000 ;
 //  route
 app.use("/api/counter",require("./Routes/counterroute"));
 
+require('dotenv').config(); // Load .env file
+app.use('/api/chatgpt', require('./Routes/chatgptroute'));
+
+
 
 /*app.get('/api/counter/test', (req, res) => {
     res.send('Test working!');
