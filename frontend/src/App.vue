@@ -1,6 +1,7 @@
 <template>
   <div class="app">
-    <h1>Counter: {{ counter }}</h1>
+    <router-view/>
+    <!--<h1>Counter: {{ counter }}</h1>  -->
 
     <div v-if="loading" class="loading">
       <p>Loading...</p>
@@ -14,7 +15,7 @@
       <p>Error: {{ error }}</p>
     </div>
 
-    <button @click="incrementCounter" :disabled="loading">
+    <!--<button @click="incrementCounter" :disabled="loading">
       Increment Counter
     </button>
     <button @click="incrementCounter" :disabled="loading">
@@ -25,7 +26,7 @@
     </button>
     <button @click="incrementCounter" :disabled="loading">
       Act
-    </button>
+    </button>  -->
   </div>
   
 </template>

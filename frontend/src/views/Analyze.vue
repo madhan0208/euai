@@ -1,13 +1,11 @@
 <template>
-  <div class="analyze-page">
-    <h1>Analyze Results</h1>
-    <p>This section will display a weighted risk score and analysis of answers.</p>
-    <!-- Consider showing a risk chart or score breakdown here -->
+  <div class="page">
+    <h2>Analyze Page</h2>
   </div>
 </template>
 
 <script setup>
-// Add logic to calculate and show risk score based on answers
+console.log("Analyze page loaded");
 </script>
 
 <style scoped>

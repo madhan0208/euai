@@ -1,14 +1,13 @@
 <template>
-  <div class="act-page">
-    <h1>Take Action</h1>
-    <p>Based on your results, these are your tailored recommendations to improve compliance.</p>
-    <!-- Show a list of compliance recommendations or tips -->
+  <div class="page">
+    <h2>Act Page</h2>
   </div>
 </template>
 
 <script setup>
-// Use props or state to display tailored advice
+console.log("Act page loaded");
 </script>
+
 
 <style scoped>
 .act-page {
