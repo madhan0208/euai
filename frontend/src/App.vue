@@ -1,170 +1,195 @@
 <template>
   <div class="app">
-    <router-view/>
-    <!--<h1>Counter: {{ counter }}</h1>  -->
+    <router-view />
 
-    <div v-if="loading" class="loading">
-      <p>Loading...</p>
+    <!-- Floating ChatGPT Button -->
+    <button class="chatgpt-button" @click="openPopup">💬 Gemini</button>
+
+    <!-- ChatGPT Modal -->
+    <div v-if="showPopup" class="chatgpt-modal-overlay" @click.self="closePopup">
+      <div class="chatgpt-modal">
+        <h2>Ask ChatGPT</h2>
+        <textarea v-model="prompt" placeholder="Type your question..." />
+
+        <div class="button-group">
+          <button @click="sendToGPT" :disabled="loading || !prompt.trim()">Send</button>
+          <button class="close-btn" @click="closePopup">Close</button>
+        </div>
+
+        <div v-if="loading" class="loading">Loading...</div>
+        <div v-if="gptResponse" class="gpt-response">
+          <strong>Response:</strong>
+          <p>{{ gptResponse }}</p>
+        </div>
+        <div v-if="error" class="error">Error: {{ error }}</div>
+      </div>
     </div>
-
-    <div v-if="success" class="success">
-      <p>Counter incremented successfully!</p>
-    </div>
-
-    <div v-if="error" class="error">
-      <p>Error: {{ error }}</p>
-    </div>
-
-    <!--<button @click="incrementCounter" :disabled="loading">
-      Increment Counter
-    </button>
-    <button @click="incrementCounter" :disabled="loading">
-      Assess
-    </button>
-    <button @click="incrementCounter" :disabled="loading">
-      Analyze
-    </button>
-    <button @click="incrementCounter" :disabled="loading">
-      Act
-    </button>  -->
   </div>
-  
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue' 
+import { ref, onMounted } from 'vue'
 
-const counter = ref(0);
-const loading = ref(false);
-const success = ref(false);
-const error = ref(null);
+const prompt = ref('')
+const gptResponse = ref('')
+const error = ref(null)
+const loading = ref(false)
+const showPopup = ref(false)
 
-let socket;
+const openPopup = () => {
+  showPopup.value = true
+}
 
-const getCounter = async () => {
+const closePopup = () => {
+  showPopup.value = false
+  prompt.value = ''
+  gptResponse.value = ''
+  error.value = null
+  loading.value = false
+}
+
+const sendToGPT = async () => {
+  if (!prompt.value.trim()) return
+
+  loading.value = true
+  error.value = null
+  gptResponse.value = ''
+
   try {
-    loading.value = true;
-    const response = await fetch('http://localhost:3000/api/counter');  //replace with current ip address
-    const data = await response.json();
-    counter.value = data.value;
-    loading.value = false;
-  } catch (err) {
-    loading.value = false;
-    error.value = 'Error fetching counter: ' + err.message;
-  }
-};
-
-const incrementCounter = async () => {
-  try {
-    loading.value = true;
-    const response = await fetch('http://localhost:3000/api/counter/increment', {  //replace with current ip address
+    const response = await fetch('http://localhost:3000/api/ask', {
       method: 'POST',
-    });
-    const data = await response.json();
-    counter.value = data.value;
-    success.value = true;
-    error.value = null;
-    loading.value = false;
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt.value }),
+    })
 
-    setTimeout(() => {
-      success.value = false;
-    }, 2000);
-  } catch (err) {
-    loading.value = false;
-    error.value = 'Error incrementing counter: ' + err.message;
-    success.value = false;
-  }
-};
-
-// Set up WebSocket connection to receive real-time updates
-onMounted(() => {
-  getCounter(); // Fetch initial counter value
-
-  socket = new WebSocket('ws://192.168.0.106:3000');  //replace with current ip address
-  
-  socket.onopen = () => {
-    console.log('WebSocket connected');
-  };
-
-  socket.onmessage = (event) => {
-    const msg = JSON.parse(event.data);
-    if (msg.type === 'update') {
-      counter.value = msg.value;
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || 'Unexpected server error')
     }
-  };
 
-  socket.onerror = (error) => {
-    console.log('WebSocket Error:', error);
-  };
+    const data = await response.json()
+    gptResponse.value = data.reply
+  } catch (err) {
+    error.value = 'Failed to reach GPT API: ' + err.message
+  } finally {
+    loading.value = false
+  }
+}
 
-  socket.onclose = () => {
-    console.log('WebSocket connection closed');
-  };
-});
+// WebSocket for counter updates (optional)
+onMounted(() => {
+  try {
+    const socket = new WebSocket('ws://localhost:3000') // Update IP if needed
+    socket.onopen = () => console.log('WebSocket connected')
+    socket.onmessage = (event) => {
+      const msg = JSON.parse(event.data)
+      if (msg.type === 'update') {
+        console.log('Counter updated to:', msg.value)
+      }
+    }
+    socket.onerror = (e) => console.warn('WebSocket error:', e)
+  } catch (e) {
+    console.warn('WebSocket setup failed:', e)
+  }
+})
 </script>
 
 <style scoped>
+
+html,body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 .app {
-  text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 2rem;
   background: #f4f6f8;
   min-height: 100vh;
+  padding: 1rem;
 }
 
-h1 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-  color: #333;
-}
-
-.counter-value {
-  font-size: 3rem;
-  font-weight: bold;
-  margin: 1rem 0;
-  color: #2c3e50;
-}
-
-button {
-  padding: 12px 24px;
-  background: linear-gradient(to right, #4CAF50, #45a049);
+.chatgpt-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4CAF50;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 18px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background 0.3s ease, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
 }
 
-button:hover {
-  background: linear-gradient(to right, #45a049, #388e3c);
-  transform: scale(1.05);
+.chatgpt-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
 }
 
-button:disabled {
-  background-color: #bbb;
-  cursor: not-allowed;
-  transform: none;
+.chatgpt-modal {
+  background: white;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.loading,
-.success,
-.error {
-  font-size: 18px;
+.chatgpt-modal textarea {
+  width: 100%;
+  height: 100px;
   margin-top: 1rem;
-  font-weight: 500;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.chatgpt-modal button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+.chatgpt-modal .close-btn {
+  background: #d9534f;
+}
+
+.gpt-response {
+  margin-top: 1rem;
+  background: #f0f0f0;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
 }
 
 .loading {
+  margin-top: 10px;
   color: #007bff;
-}
-
-.success {
-  color: #28a745;
-}
-
-.error {
-  color: #dc3545;
 }
 </style>

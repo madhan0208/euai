@@ -26,7 +26,7 @@ export default {
       this.response = '';
       this.error = '';
       try {
-        const res = await fetch('http://localhost:3000/api/chatgpt/ask', {
+        const res = await fetch('/api/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ prompt: this.prompt })

@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import path from 'path'
-
+import path from 'path';
 
 export default defineConfig({
   plugins: [vue()],
@@ -12,10 +11,17 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 5173, 
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   },
-  test:{
-    globals:true,
-    environment:'jsdom',
-  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+  }
 });

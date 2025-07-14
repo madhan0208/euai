@@ -452,12 +452,17 @@ export default {
 </script>
 
 <style scoped>
+
 .assessment-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   font-family: Arial, sans-serif;
 }
+
 
 .header {
   background-color: #2c3e50;

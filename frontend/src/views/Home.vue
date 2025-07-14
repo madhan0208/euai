@@ -55,9 +55,12 @@
 
 <style scoped>
 .assessment-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   font-family: Arial, sans-serif;
 }
 
@@ -222,6 +225,21 @@
 }
 
 
+.card {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin-top: -20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.assessment-container {
+  background-color: #f0f2f5; /* light background */
+}
+
 .card-title {
   color: white; /* Changed from red to white for consistency with card background */
   margin-top: 0;
@@ -320,4 +338,20 @@
     margin-bottom: 1rem; /* Add space between stacked cards */
   }
 }
+
+
+.info-box {
+  margin-top: 2rem;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  padding: 3rem; /* increased from 2rem */
+  border-radius: 10px;
+  max-width: 700px; /* increased from 600px */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  font-size: 1.1rem; /* increased font size */
+  line-height: 1.6; /* improve readability */
+}
+
 </style>
