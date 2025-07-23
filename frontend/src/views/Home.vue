@@ -175,7 +175,7 @@
   justify-content: center;
   gap: 1rem;
   margin: 2rem 0;
-  flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+  flex-wrap: wrap; 
 }
 
 .feature-card {
@@ -185,10 +185,10 @@
   color: white;
   font-weight: bold;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  flex: 1; /* Allow cards to grow and shrink */
-  min-width: 200px; /* Minimum width for each card */
-  max-width: 28%; /* Adjust for 3 cards per row */
-  display: flex; /* Use flex for internal content alignment */
+  flex: 1; 
+  min-width: 200px; 
+  max-width: 28%; 
+  display: flex; 
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -202,7 +202,7 @@
 .feature-card h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  font-size: 1.8rem; /* Adjusted for better fit */
+  font-size: 1.8rem; 
 }
 
 .feature-card h4 {
@@ -211,16 +211,16 @@
   margin: 0;
 }
 
-/* Specific background colors for feature cards, like original */
-.card-group .feature-card:nth-child(1) { /* Assess */
+
+.card-group .feature-card:nth-child(1) { 
   background-color: #1f3a93;
 }
 
-.card-group .feature-card:nth-child(2) { /* Analyze */
+.card-group .feature-card:nth-child(2) { 
   background-color: #26a69a;
 }
 
-.card-group .feature-card:nth-child(3) { /* Act */
+.card-group .feature-card:nth-child(3) { 
   background-color: #1f3a93;
 }
 
@@ -237,32 +237,32 @@
   justify-content: space-between;
 }
 .assessment-container {
-  background-color: #f0f2f5; /* light background */
+  background-color: #f0f2f5; 
 }
 
 .card-title {
-  color: white; /* Changed from red to white for consistency with card background */
+  color: white; 
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
 
 .card-description {
   color: white;
-  background-color: transparent; /* Remove red background, rely on card's background */
-  padding: 0; /* Remove padding if any */
+  background-color: transparent; 
+  padding: 0; 
   margin: 0;
 }
 
 .info-box {
   margin-top: 2rem;
-  background-color: #f9f9f9; /* Lighter background like question items */
-  border: 1px solid #e0e0e0; /* Border like question items */
+  background-color: #f9f9f9; 
+  border: 1px solid #e0e0e0; 
   padding: 2rem;
   border-radius: 8px;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  text-align: left; /* Keep text alignment to left for readability of lists */
+  text-align: left; 
 }
 
 .info-box h2 {
@@ -290,20 +290,20 @@
 .start-assessment-btn {
   display: inline-block;
   margin-top: 1rem;
-  background-color: #3498db; /* Consistent with button color on questions page */
+  background-color: #3498db; 
   color: white;
   padding: 0.8rem 1.5rem;
-  border-radius: 6px; /* Consistent with button border-radius */
+  border-radius: 6px; 
   text-decoration: none;
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
 
 .start-assessment-btn:hover {
-  background-color: #2980b9; /* Consistent hover state */
+  background-color: #2980b9; 
 }
 
-/* Responsive adjustments for smaller screens */
+
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
@@ -330,12 +330,12 @@
     margin-right: 0;
   }
   .card-group {
-    flex-direction: column; /* Stack cards vertically on small screens */
+    flex-direction: column; 
     align-items: center;
   }
   .feature-card {
-    max-width: 90%; /* Make cards wider when stacked */
-    margin-bottom: 1rem; /* Add space between stacked cards */
+    max-width: 90%; 
+    margin-bottom: 1rem; 
   }
 }
 
@@ -344,14 +344,14 @@
   margin-top: 2rem;
   background-color: #f9f9f9;
   border: 1px solid #e0e0e0;
-  padding: 3rem; /* increased from 2rem */
+  padding: 3rem; 
   border-radius: 10px;
-  max-width: 700px; /* increased from 600px */
+  max-width: 700px; 
   margin-left: auto;
   margin-right: auto;
   text-align: left;
-  font-size: 1.1rem; /* increased font size */
-  line-height: 1.6; /* improve readability */
+  font-size: 1.1rem; 
+  line-height: 1.6; 
 }
 
 </style>

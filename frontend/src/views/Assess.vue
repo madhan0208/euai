@@ -12,7 +12,7 @@
         <li>Detailed compliance memo with recommendations</li>
       </ul>
       <p><strong>Time Required:</strong> 15–20 minutes</p>
-      <!-- Optional button inside Assess page -->
+      
       <button class="start-btn">Start Now</button>
     </div>
   </div>

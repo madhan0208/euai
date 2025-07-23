@@ -1,35 +1,45 @@
 <template>
   <div class="app">
-    <router-view />
 
-    <!-- Floating ChatGPT Button -->
-    <button class="chatgpt-button" @click="openPopup">💬 Gemini</button>
+    <div v-if="showSplash" class="splash-screen">
+      <h1>Welcome to EU AI Assesment</h1>
+      <p>Loading...</p>
+    </div>
 
-    <!-- ChatGPT Modal -->
-    <div v-if="showPopup" class="chatgpt-modal-overlay" @click.self="closePopup">
-      <div class="chatgpt-modal">
-        <h2>Ask ChatGPT</h2>
-        <textarea v-model="prompt" placeholder="Type your question..." />
 
-        <div class="button-group">
-          <button @click="sendToGPT" :disabled="loading || !prompt.trim()">Send</button>
-          <button class="close-btn" @click="closePopup">Close</button>
+    <div v-else>
+      <router-view />
+
+
+      <button class="gemini-button" @click="openPopup">💬 Gemini</button>
+
+
+      <div v-if="showPopup" class="gemini-modal-overlay" @click.self="closePopup">
+        <div class="gemini-modal">
+          <h2>Ask Gemini</h2>
+          <textarea v-model="prompt" placeholder="Type your question..." />
+
+          <div class="button-group">
+            <button @click="sendToGPT" :disabled="loading || !prompt.trim()">Send</button>
+            <button class="close-btn" @click="closePopup">Close</button>
+          </div>
+
+          <div v-if="loading" class="loading">Loading...</div>
+          <div v-if="gptResponse" class="gpt-response">
+            <strong>Response:</strong>
+            <p>{{ gptResponse }}</p>
+          </div>
+          <div v-if="error" class="error">Error: {{ error }}</div>
         </div>
-
-        <div v-if="loading" class="loading">Loading...</div>
-        <div v-if="gptResponse" class="gpt-response">
-          <strong>Response:</strong>
-          <p>{{ gptResponse }}</p>
-        </div>
-        <div v-if="error" class="error">Error: {{ error }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
+const showSplash = ref(true)
 const prompt = ref('')
 const gptResponse = ref('')
 const error = ref(null)
@@ -76,8 +86,13 @@ const sendToGPT = async () => {
   }
 }
 
-// WebSocket for counter updates (optional)
+
 onMounted(() => {
+
+  setTimeout(() => {
+    showSplash.value = false
+  }, 3000)
+
   try {
     const socket = new WebSocket('ws://localhost:3000') // Update IP if needed
     socket.onopen = () => console.log('WebSocket connected')
@@ -91,6 +106,19 @@ onMounted(() => {
   } catch (e) {
     console.warn('WebSocket setup failed:', e)
   }
+})
+
+
+const handleKeyDown = (e) => {
+  if (e.key === 'Escape' && showPopup.value) {
+    closePopup()
+  }
+}
+
+window.addEventListener('keydown', handleKeyDown)
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeyDown)
 })
 </script>
 
@@ -108,10 +136,11 @@ html,body{
   padding: 1rem;
 }
 
-.chatgpt-button {
+.gemini-button {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  left: 50%; 
+  transform: translateX(-50%); 
   background: #4CAF50;
   color: white;
   border: none;
@@ -123,7 +152,7 @@ html,body{
   z-index: 9999;
 }
 
-.chatgpt-modal-overlay {
+.gemini-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -136,7 +165,7 @@ html,body{
   z-index: 9998;
 }
 
-.chatgpt-modal {
+.gemini-modal {
   background: white;
   padding: 2rem;
   width: 90%;
@@ -146,7 +175,7 @@ html,body{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.chatgpt-modal textarea {
+.gemini-modal textarea {
   width: 100%;
   height: 100px;
   margin-top: 1rem;
@@ -162,7 +191,7 @@ html,body{
   margin-top: 1rem;
 }
 
-.chatgpt-modal button {
+.gemini-modal button {
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 6px;
@@ -172,7 +201,7 @@ html,body{
   cursor: pointer;
 }
 
-.chatgpt-modal .close-btn {
+.gemini-modal .close-btn {
   background: #d9534f;
 }
 
@@ -192,4 +221,90 @@ html,body{
   margin-top: 10px;
   color: #007bff;
 }
+.app {
+  position: relative;
+  font-family: Arial, sans-serif;
+}
+
+
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #282c34;
+  color: #61dafb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  z-index: 9999;
+}
+
+
+
+
+
+.gemini-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+/* Modal box */
+.gemini-modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  padding: 8px;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading {
+  margin-top: 10px;
+  color: #333;
+}
+
+.gpt-response {
+  margin-top: 15px;
+  background: #f6f6f6;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.error {
+  margin-top: 10px;
+  color: red;
+}
+
 </style>

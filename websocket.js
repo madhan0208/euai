@@ -15,7 +15,6 @@ function setupWebSocket(server) {
     ws.on('message', (message) => {
       try {
         const data = JSON.parse(message);
-        // Handle incoming data if needed
       } catch (e) {
         console.error('Invalid JSON:', message);
       }

@@ -1,4 +1,4 @@
-<template>
+<!---<template>
   <div class="chatgpt">
     <h2>Ask ChatGPT</h2>
     <textarea v-model="prompt" rows="4" cols="50" placeholder="Ask me something..."></textarea>

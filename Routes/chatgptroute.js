@@ -1,4 +1,4 @@
-const express = require('express');
+/**const express = require('express');
 const { askGemini } = require('../gemini'); // renamed from askChatGPT
 const router = express.Router();
 
@@ -18,4 +18,4 @@ router.post('/ask', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router;**/
